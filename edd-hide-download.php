@@ -3,15 +3,14 @@
 Plugin Name: Easy Digital Downloads - Hide Download
 Plugin URI: http://sumobi.com/shop/edd-hide-download/
 Description: Allows a download to be hidden as well as preventing direct access to the download
-Version: 1.1.1
+Version: 1.1.5
 Author: Andrew Munro, Sumobi
 Author URI: http://sumobi.com/
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
 */
 
-
-if ( !class_exists( 'EDD_Hide_Download' ) ) {
+if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 	class EDD_Hide_Download {
 
@@ -27,7 +26,7 @@ if ( !class_exists( 'EDD_Hide_Download' ) ) {
 			add_action( 'init', array( $this, 'textdomain' ) );
 			add_action( 'edd_meta_box_fields', array( $this, 'add_metabox' ), 100 );
 			add_action( 'edd_metabox_fields_save', array( $this, 'save_metabox' ) );
-			add_action( 'pre_get_posts',  array( $this, 'pre_get_posts' ) );
+			add_action( 'pre_get_posts',  array( $this, 'pre_get_posts' ), 9999 );
 			add_filter( 'edd_downloads_query', array( $this, 'shortcode_query' ) );
 
 			// find all hidden products on metabox render
@@ -77,7 +76,6 @@ if ( !class_exists( 'EDD_Hide_Download' ) ) {
 		<?php
 		}
 
-
 		/**
 		 * Add to save function
 		 *
@@ -90,30 +88,29 @@ if ( !class_exists( 'EDD_Hide_Download' ) ) {
 			return $fields;
 		}
 
-
 		/**
 		 * Store the hidden products ids in the options table
 		 *  @since 1.1
 		 */
 		function query_hidden_downloads() {
-			
 			$args = array(
 				'post_type' => 'download',
 				'meta_key' => '_edd_hide_download',
+				'posts_per_page' => -1
 			);
 
 			$downloads = get_posts( $args );
 
 			$hidden_downloads = array();
 
-			foreach ( $downloads as $download ) {
-				$hidden_downloads[] = $download->ID;
+			if ( $downloads ) {
+				foreach ( $downloads as $download ) {
+					$hidden_downloads[] = $download->ID;
+				}
 			}
-
+			
 			update_option( 'edd_hd_ids', $hidden_downloads );
-
 		}
-		
 
 		/**
 		 * Get array hidden downloads
@@ -121,7 +118,6 @@ if ( !class_exists( 'EDD_Hide_Download' ) ) {
 		 * @since 1.0
 		*/
 		function get_hidden_downloads() {			
-
 			return $this->hidden_downloads;
 		}
 
@@ -136,7 +132,6 @@ if ( !class_exists( 'EDD_Hide_Download' ) ) {
 			return $query;
 		}
 
-
 		/**
 		 * Alter the main loop to hide download using pre_get_posts
 		 * We're not using ! is_main_query because no matter what the query is on the page we want to hide them
@@ -144,17 +139,17 @@ if ( !class_exists( 'EDD_Hide_Download' ) ) {
 		 */
 		function pre_get_posts( $query ) {
 
-			// bail if in the admin or we're not working with the main WP query
+			// bail if in the admin
 			if ( is_admin() )
 				return;
 
 			// hide downloads from all queries except singular pages, which will 404 without the conditional
 			// is_singular('download') doesn't work inside pre_get_posts
-			if ( ! is_singular() )
+			
+			if( ! $query->is_single )
 				$query->set( 'post__not_in', $this->get_hidden_downloads() );
 
 		}
-
 
 		/**
 		 * Redirect if product needs to be hidden
@@ -163,24 +158,23 @@ if ( !class_exists( 'EDD_Hide_Download' ) ) {
 		function redirect_hidden() {
 			global $post;
 
-			 if ( ! in_array( $post->ID, $this->hidden_downloads ) )
-			 	return;	
+			if ( ! is_singular( 'download' ) )
+				return;
 
-			 $is_redirect_active = (boolean) get_post_meta( $post->ID, '_edd_hide_redirect_download', true );
+			$is_redirect_active = (boolean) get_post_meta( $post->ID, '_edd_hide_redirect_download', true );
 
-			 if ( $is_redirect_active ) {
-
-				$redirect_url = site_url();
+			if ( $is_redirect_active ) {
+				$redirect_url = apply_filters( 'edd_hide_download_redirect', site_url() );
 
 				if ( isset( $_REQUEST['HTTP_REFERER'] ) ) {
 					$referer = esc_url( $_REQUEST['HTTP_REFERER '] );
 
-					if ( strpos( $referer, $redirect_url ) !== false )
+					if ( strpos( $referer, $redirect_url ) !== false ) {
 						$redirect_url = $referer;
+					}
 				}
 
 				wp_redirect( $redirect_url, 301 ); exit;
-				
 			}
 			
 		}
