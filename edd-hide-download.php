@@ -133,7 +133,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 			
 			add_filter( 'plugin_row_meta', array( $this, 'plugin_meta' ), null, 2 );
 
-			add_action( 'edd_meta_box_fields', array( $this, 'add_metabox' ), 100 );
+			add_action( 'edd_meta_box_settings_fields', array( $this, 'add_metabox' ), 100 );
 			add_action( 'edd_metabox_fields_save', array( $this, 'save_metabox' ) );
 			add_action( 'pre_get_posts',  array( $this, 'pre_get_posts' ), 9999 );
 			add_filter( 'edd_downloads_query', array( $this, 'shortcode_query' ) );

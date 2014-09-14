@@ -92,10 +92,12 @@ After activation, a new "Hide Download" section will appear at the bottom of Eas
 = 1.2.3 =
 Fix: Forums not being shown in bbPress
 
+
 == Changelog ==
 
 = 1.2.3 =
 * Fix: Forums not being shown in bbPress
+* Tweak: Moved the plugin's options to EDD's "download settings" metabox
 
 = 1.2.2 =
 * Fix: Fatal error when bbPress was not active. Added check for existance of bbPress. 
