@@ -6,6 +6,8 @@ Description: Allows a download to be hidden as well as preventing direct access 
 Version: 1.2.7
 Author: Andrew Munro, Sumobi
 Author URI: http://sumobi.com/
+ Text Domain: edd-hd
+ Domain Path: languages
 License: GPL-2.0+
 License URI: http://www.opensource.org/licenses/gpl-license.php
 */
@@ -129,7 +131,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @return void
 		 */
 		private function hooks() {
-			
+
 			add_filter( 'plugin_row_meta', array( $this, 'plugin_meta' ), null, 2 );
 
 			add_action( 'edd_meta_box_settings_fields', array( $this, 'add_metabox' ), 100 );
@@ -195,7 +197,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 				<label for="edd_hide_download">
 					<input type="checkbox" name="_edd_hide_download" id="edd_hide_download" value="1" <?php checked( true, $checked ); ?> />
 					<?php apply_filters( 'edd_hide_download_label', printf( __( 'Hide this %s', 'edd-hd' ), strtolower( edd_get_label_singular() ) ) ); ?>
-				
+
 				</label>
 			</p>
 			<p>
@@ -240,7 +242,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 					$hidden_downloads[] = $download->ID;
 				}
 			}
-			
+
 			update_option( 'edd_hd_ids', $hidden_downloads );
 		}
 
@@ -249,7 +251,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 *
 		 * @since 1.0
 		*/
-		function get_hidden_downloads() {			
+		function get_hidden_downloads() {
 			return $this->hidden_downloads;
 		}
 
@@ -287,7 +289,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 			// hide downloads from all queries except singular pages, which will 404 without the conditional
 			// is_singular('download') doesn't work inside pre_get_posts
-			
+
 			if ( ! $query->is_single ) {
 				$excluded_ids = isset( $query->query_vars['post__not_in'] ) ? $query->query_vars['post__not_in'] : array();
 				// make sure we're merging with existing post__not_in so we do not override it
@@ -321,7 +323,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 				wp_redirect( $redirect_url, 301 ); exit;
 			}
-			
+
 		}
 
 		/**
@@ -373,7 +375,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 	        $activation = new EDD_Extension_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
 	        $activation = $activation->run();
-	     
+
 	    } else {
 	        return EDD_Hide_Download::get_instance();
 	    }
