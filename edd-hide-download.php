@@ -249,7 +249,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 *
 		 * @since 1.0
 		*/
-		function get_hidden_downloads() {			
+		function get_hidden_downloads() {
 			return $this->hidden_downloads;
 		}
 
@@ -287,6 +287,14 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 			// hide downloads from all queries except singular pages, which will 404 without the conditional
 			// is_singular('download') doesn't work inside pre_get_posts
+
+			// Allow the /edd-api/products endpoint to show the product to admins
+			if ( defined( 'EDD_DOING_API' ) && EDD_DOING_API ) {
+				$user_id = EDD()->api->get_user();
+				if ( user_can( $user_id, 'edit_posts' ) ) {
+					return;
+				}
+			}
 			
 			if ( ! $query->is_single ) {
 				$excluded_ids = isset( $query->query_vars['post__not_in'] ) ? $query->query_vars['post__not_in'] : array();
