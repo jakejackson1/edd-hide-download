@@ -1,16 +1,16 @@
 <?php
-/*
-Plugin Name: Easy Digital Downloads - Hide Download
-Plugin URI: http://sumobi.com/shop/edd-hide-download/
-Description: Allows a download to be hidden as well as preventing direct access to the download
-Version: 1.2.8
-Author: Andrew Munro, Sumobi
-Author URI: http://sumobi.com/
- Text Domain: edd-hd
- Domain Path: languages
-License: GPL-2.0+
-License URI: http://www.opensource.org/licenses/gpl-license.php
-*/
+/**
+ * Plugin Name: Easy Digital Downloads - Hide Download
+ * Plugin URI: https://easydigitaldownloads.com/downloads/hide-download/
+ * Description: Allows a download to be hidden as well as preventing direct access to the download
+ * Version: 1.2.8
+ * Author: Sandhills Development, LLC
+ * Author URI: https://sandhillsdev.com
+ * Text Domain: edd-hd
+ * Domain Path: languages
+ * License: GPL-2.0+
+ * License URI: http://www.opensource.org/licenses/gpl-license.php
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -133,8 +133,6 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @return void
 		 */
 		private function hooks () {
-
-			add_filter( 'plugin_row_meta', array( $this, 'plugin_meta' ), null, 2 );
 
 			add_action( 'edd_meta_box_settings_fields', array( $this, 'add_metabox' ), 100 );
 			add_action( 'edd_metabox_fields_save', array( $this, 'save_metabox' ) );
@@ -337,30 +335,6 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 			}
 
 		}
-
-		/**
-		 * Modify plugin metalinks
-		 *
-		 * @access      public
-		 * @since       1.2
-		 *
-		 * @param       array  $links The current links array
-		 * @param       string $file  A specific plugin table entry
-		 *
-		 * @return      array $links The modified links array
-		 */
-		public function plugin_meta ( $links, $file ) {
-			if ( $file == plugin_basename( __FILE__ ) ) {
-				$plugins_link = array(
-					'<a title="View more plugins for Easy Digital Downloads by Sumobi" href="https://easydigitaldownloads.com/blog/author/andrewmunro/?ref=166" target="_blank">' . __( 'Author\'s EDD plugins', 'edd-hd' ) . '</a>',
-				);
-
-				$links = array_merge( $links, $plugins_link );
-			}
-
-			return $links;
-		}
-
 	}
 
 	/**
