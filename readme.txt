@@ -1,9 +1,8 @@
 === EDD Hide Download ===
 Contributors: easydigitaldownloads, sumobi, alex.i
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EFUPMPEZPGW7L
 Tags: easy digital downloads, digital downloads, e-downloads, edd, hide, e-commerce, ecommerce, hidden, sumobi
 Requires at least: 4.0
-Tested up to: 5.0
+Tested up to: 5.7
 Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +11,7 @@ Allows a download to be hidden as well as preventing direct access to the downlo
 
 == Description ==
 
-This plugin requires [Easy Digital Downloads](http://wordpress.org/extend/plugins/easy-digital-downloads/ "Easy Digital Downloads"). 
+This plugin requires [Easy Digital Downloads](https://wordpress.org/plugins/easy-digital-downloads/).
 
 It allows you to:
 
@@ -23,7 +22,7 @@ It allows you to:
 This plugin is extremely useful in the following situations:
 
 1. You've created a product landing page and inserted a buy now button to your product. Since the landing page contains all the required product information, you can hide the product on the rest of your site and even prevent direct access to it.
-1. You've added a product (eg support package) that shouldn't sit with your other products you have listed. In this case we can simply hide it from appearing with the other products and insert it where we'd like it to appear using the shortcode. 
+1. You've added a product (eg support package) that shouldn't sit with your other products you have listed. In this case we can simply hide it from appearing with the other products and insert it where we'd like it to appear using the shortcode.
 
 **Filter example**
 
@@ -34,12 +33,12 @@ Example filter of how you can change the redirect based on the download ID. Copy
 		if ( '17' == get_the_ID() ) {
 			$url = 'http://easydigitaldownloads.com'; // redirect user to another external URL
 		}
-		
+
 		// download has ID of 15
 		if( '15' == get_the_ID() ) {
 			$url = get_permalink( '8' ); // redirect to another download which has an ID of 8
 		}
-		
+
 		// return our new URL
 		return $url;
 	}
@@ -49,7 +48,7 @@ Example filter of how you can globally change the redirect. Copy this function t
 
     function sumobi_custom_edd_hide_download_redirect_url( $url ) {
 		$url = get_permalink( '8' ); // redirect to another download, post or page
-		
+
 		return $url;
 	}
 	add_filter( 'edd_hide_download_redirect', 'sumobi_custom_edd_hide_download_redirect' );
@@ -57,19 +56,6 @@ Example filter of how you can globally change the redirect. Copy this function t
 **Extensions for Easy Digital Downloads**
 
 [https://easydigitaldownloads.com/extensions/](https://easydigitaldownloads.com/extensions/?ref=166 "Plugins for Easy Digital Downloads")
-
-**Tips for Easy Digital Downloads**
-
-[http://sumobi.com/blog](http://sumobi.com/blog "Tips for Easy Digital Downloads")
-
-**Stay up to date**
-
-*Follow me on Twitter* 
-[http://twitter.com/sumobi_](http://twitter.com/sumobi_ "Twitter")
-
-*Become a fan on Facebook* 
-[http://www.facebook.com/sumobicom](http://www.facebook.com/sumobicom "Facebook")
-
 
 == Installation ==
 
@@ -104,7 +90,7 @@ Fix: Fatal error if FES was not active.
 * New: Compability with the Front End Submissions extension. When a download is hidden it will remain visible on the vendor's dashboard product page
 
 = 1.2.5 =
-* Fix: Plugin became deactivated when EDD was updated 
+* Fix: Plugin became deactivated when EDD was updated
 
 = 1.2.4 =
 * Fix: Hidden downloads not being hidden properly on some pages such as the custom post type archive pages
@@ -114,7 +100,7 @@ Fix: Fatal error if FES was not active.
 * Tweak: Moved the plugin's options to EDD's "download settings" metabox
 
 = 1.2.2 =
-* Fix: Fatal error when bbPress was not active. Added check for existance of bbPress. 
+* Fix: Fatal error when bbPress was not active. Added check for existance of bbPress.
 
 = 1.2.1 =
 * Fix: Compatibility with bbPress - props @nphaskins‎
