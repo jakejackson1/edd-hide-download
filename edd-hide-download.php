@@ -299,12 +299,9 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 			// hide downloads from all queries except singular pages, which will 404 without the conditional
 			// is_singular('download') doesn't work inside pre_get_posts
-			if ( ! $query->is_single ) {
-				$excluded_ids = isset( $query->query_vars[ 'post__not_in' ] ) ? $query->query_vars[ 'post__not_in' ] : array();
-				// make sure we're merging with existing post__not_in so we do not override it
-				$query->set( 'post__not_in', array_merge( $excluded_ids, $this->get_hidden_downloads() ) );
-			}
-
+			$excluded_ids = isset( $query->query_vars['post__not_in'] ) ? $query->query_vars['post__not_in'] : array();
+			// make sure we're merging with existing post__not_in so we do not override it
+			$query->set( 'post__not_in', array_merge( $excluded_ids, $this->get_hidden_downloads() ) );
 		}
 
 		/**
