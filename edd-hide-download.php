@@ -285,7 +285,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 			$vendor_dashboard_page = edd_get_option( 'fes-vendor-dashboard-page', false );
 			// if a download is hidden, prevent it from being hidden on the FES vendor dashboard page
-			if ( function_exists( 'EDD_FES' ) && ! empty( $query->query['page_id'] ) && $vendor_dashboard_page == $query->query['page_id'] ) {
+			if ( function_exists( 'EDD_FES' ) && ! $query->is_main_query() && is_page( $vendor_dashboard_page ) ) {
 				return;
 			}
 
