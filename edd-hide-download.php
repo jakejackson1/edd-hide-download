@@ -1,16 +1,16 @@
 <?php
-/*
-Plugin Name: Easy Digital Downloads - Hide Download
-Plugin URI: http://sumobi.com/shop/edd-hide-download/
-Description: Allows a download to be hidden as well as preventing direct access to the download
-Version: 1.2.8
-Author: Andrew Munro, Sumobi
-Author URI: http://sumobi.com/
- Text Domain: edd-hd
- Domain Path: languages
-License: GPL-2.0+
-License URI: http://www.opensource.org/licenses/gpl-license.php
-*/
+/**
+ * Plugin Name: Easy Digital Downloads - Hide Download
+ * Plugin URI: https://easydigitaldownloads.com/downloads/hide-download/
+ * Description: Allows a download to be hidden as well as preventing direct access to the download
+ * Version: 1.2.9
+ * Author: Sandhills Development, LLC
+ * Author URI: https://sandhillsdev.com
+ * Text Domain: edd-hd
+ * Domain Path: languages
+ * License: GPL-2.0+
+ * License URI: http://www.opensource.org/licenses/gpl-license.php
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -94,7 +94,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @return void
 		 */
 		private function setup_globals () {
-			$this->version = '1.2.8';
+			$this->version = '1.2.9';
 			$this->title   = 'EDD Hide Download';
 
 			// paths
@@ -133,8 +133,6 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @return void
 		 */
 		private function hooks () {
-
-			add_filter( 'plugin_row_meta', array( $this, 'plugin_meta' ), null, 2 );
 
 			add_action( 'edd_meta_box_settings_fields', array( $this, 'add_metabox' ), 100 );
 			add_action( 'edd_metabox_fields_save', array( $this, 'save_metabox' ) );
@@ -275,18 +273,19 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * We're not using ! is_main_query because no matter what the query is on the page we want to hide them
 		 * @since 1.0
 		 */
-		function pre_get_posts ( $query ) {
+		public function pre_get_posts( $query ) {
 
 			if ( ! isset( $query ) ) {
 				return;
 			}
 
-			if ( $query->is_single || ( function_exists( 'is_bbpress' ) && is_bbpress() ) || is_admin() ) {
+			if ( $query->is_single || ( function_exists( 'is_bbpress' ) && is_bbpress() ) || $query->is_admin ) {
 				return;
 			}
 
+			$vendor_dashboard_page = edd_get_option( 'fes-vendor-dashboard-page', false );
 			// if a download is hidden, prevent it from being hidden on the FES vendor dashboard page
-			if ( function_exists( 'EDD_FES' ) && is_page( EDD_FES()->helper->get_option( 'fes-vendor-dashboard-page', false ) ) ) {
+			if ( function_exists( 'EDD_FES' ) && ! $query->is_main_query() && is_page( $vendor_dashboard_page ) ) {
 				return;
 			}
 
@@ -300,12 +299,9 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 			// hide downloads from all queries except singular pages, which will 404 without the conditional
 			// is_singular('download') doesn't work inside pre_get_posts
-			if ( ! $query->is_single ) {
-				$excluded_ids = isset( $query->query_vars[ 'post__not_in' ] ) ? $query->query_vars[ 'post__not_in' ] : array();
-				// make sure we're merging with existing post__not_in so we do not override it
-				$query->set( 'post__not_in', array_merge( $excluded_ids, $this->get_hidden_downloads() ) );
-			}
-
+			$excluded_ids = isset( $query->query_vars['post__not_in'] ) ? $query->query_vars['post__not_in'] : array();
+			// make sure we're merging with existing post__not_in so we do not override it
+			$query->set( 'post__not_in', array_merge( $excluded_ids, $this->get_hidden_downloads() ) );
 		}
 
 		/**
@@ -337,30 +333,6 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 			}
 
 		}
-
-		/**
-		 * Modify plugin metalinks
-		 *
-		 * @access      public
-		 * @since       1.2
-		 *
-		 * @param       array  $links The current links array
-		 * @param       string $file  A specific plugin table entry
-		 *
-		 * @return      array $links The modified links array
-		 */
-		public function plugin_meta ( $links, $file ) {
-			if ( $file == plugin_basename( __FILE__ ) ) {
-				$plugins_link = array(
-					'<a title="View more plugins for Easy Digital Downloads by Sumobi" href="https://easydigitaldownloads.com/blog/author/andrewmunro/?ref=166" target="_blank">' . __( 'Author\'s EDD plugins', 'edd-hd' ) . '</a>',
-				);
-
-				$links = array_merge( $links, $plugins_link );
-			}
-
-			return $links;
-		}
-
 	}
 
 	/**

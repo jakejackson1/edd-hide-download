@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Easy Digital Downloads - Hide Download\n"
+"POT-Creation-Date: 2018-01-14 12:39+0100\n"
+"PO-Revision-Date: 2018-01-14 12:44+0100\n"
+"Last-Translator: Finn Sommer Jensen <f.sommer.jensen@gmail.com>\n"
+"Language-Team: Finn Sommer Jensen <f.sommer.jensen@gmail.com>\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.5\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: edd-hide-download.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: edd-hide-download.php:197
+#, php-format
+msgid "Hide %s"
+msgstr "Skjul %s"
+
+#: edd-hide-download.php:202
+#, php-format
+msgid "Hide this %s"
+msgstr "Skjul denne %s"
+
+#: edd-hide-download.php:209
+#, php-format
+msgid "Disable direct access to this %s"
+msgstr "Deaktiver direkte adgang til denne %s"
+
+#: edd-hide-download.php:355
+msgid "Author's EDD plugins"
+msgstr "Forfatterens EDD plugins"
+
+#: includes/class-activation.php:47
+msgid "This plugin"
+msgstr "Dette plugin"
+
+#: includes/class-activation.php:81
+#, php-format
+msgid " requires %sEasy Digital Downloads%s. Please activate it to continue."
+msgstr ""
+" kræver %sEasy Digital Downloads%s. Aktiver det venligst for at fortsætte."
+
+#: includes/class-activation.php:83
+#, php-format
+msgid " requires %sEasy Digital Downloads%s. Please install it to continue."
+msgstr ""
+" kræver %sEasy Digital Downloads%s. Installer det venligst for at "
+"fortsætte."
+
+#. Plugin Name of the plugin/theme
+msgid "Easy Digital Downloads - Hide Download"
+msgstr "Easy Digital Downloads - Hide Download"
+
+#. Plugin URI of the plugin/theme
+msgid "http://sumobi.com/shop/edd-hide-download/"
+msgstr "http://sumobi.com/shop/edd-hide-download/"
+
+#. Description of the plugin/theme
+msgid ""
+"Allows a download to be hidden as well as preventing direct access to the "
+"download"
+msgstr ""
+"Tillader at en download skjules såvel som at forhindre direkte adgang til "
+"downloaden"
+
+#. Author of the plugin/theme
+msgid "Andrew Munro, Sumobi"
+msgstr "Andrew Munro, Sumobi"
+
+#. Author URI of the plugin/theme
+msgid "http://sumobi.com/"
+msgstr "http://sumobi.com/"
