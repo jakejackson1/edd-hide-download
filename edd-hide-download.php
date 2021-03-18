@@ -273,18 +273,19 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * We're not using ! is_main_query because no matter what the query is on the page we want to hide them
 		 * @since 1.0
 		 */
-		function pre_get_posts ( $query ) {
+		public function pre_get_posts( $query ) {
 
 			if ( ! isset( $query ) ) {
 				return;
 			}
 
-			if ( $query->is_single || ( function_exists( 'is_bbpress' ) && is_bbpress() ) || is_admin() ) {
+			if ( $query->is_single || ( function_exists( 'is_bbpress' ) && is_bbpress() ) || $query->is_admin ) {
 				return;
 			}
 
+			$vendor_dashboard_page = edd_get_option( 'fes-vendor-dashboard-page', false );
 			// if a download is hidden, prevent it from being hidden on the FES vendor dashboard page
-			if ( function_exists( 'EDD_FES' ) && is_page( EDD_FES()->helper->get_option( 'fes-vendor-dashboard-page', false ) ) ) {
+			if ( function_exists( 'EDD_FES' ) && ! empty( $query->query['page_id'] ) && $vendor_dashboard_page == $query->query['page_id'] ) {
 				return;
 			}
 
