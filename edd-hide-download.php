@@ -3,7 +3,7 @@
  * Plugin Name: Easy Digital Downloads - Hide Download
  * Plugin URI: https://easydigitaldownloads.com/downloads/hide-download/
  * Description: Allows a download to be hidden as well as preventing direct access to the download
- * Version: 1.2.8
+ * Version: 1.2.9
  * Author: Sandhills Development, LLC
  * Author URI: https://sandhillsdev.com
  * Text Domain: edd-hd
@@ -94,7 +94,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @return void
 		 */
 		private function setup_globals () {
-			$this->version = '1.2.8';
+			$this->version = '1.2.9';
 			$this->title   = 'EDD Hide Download';
 
 			// paths

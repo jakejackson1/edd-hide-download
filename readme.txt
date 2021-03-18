@@ -3,7 +3,7 @@ Contributors: easydigitaldownloads, sumobi, alex.i
 Tags: easy digital downloads, digital downloads, e-downloads, edd, hide, e-commerce, ecommerce, hidden, sumobi
 Requires at least: 4.0
 Tested up to: 5.7
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,17 +74,21 @@ After activation, a new "Hide Download" section will appear at the bottom of Eas
 
 
 == Upgrade Notice ==
-= 1.2.8 =
-Fix: Do not hide downloads in API when user with edit_post capability is making API request.
-
-= 1.2.7 =
-Fix: Fatal error if FES was not active.
+= 1.2.9 =
+Fix PHP notices when FES is active and viewing a vendor's store.
 
 == Changelog ==
 
+= 1.2.9 =
+* New: Added Danish translation.
+* Fix: Frontend Submissions Integration: PHP notices when viewing a vendor's store.
+* Tweak: Update plugin author name and URI to Sandhills Development, LLC.
+
+= 1.2.8 =
+* Fix: Do not hide downloads in API when user with edit_post capability is making API request.
+
 = 1.2.7 =
 * Fix: Fatal error if FES was not active.
-
 
 = 1.2.6 =
 * New: Compability with the Front End Submissions extension. When a download is hidden it will remain visible on the vendor's dashboard product page
