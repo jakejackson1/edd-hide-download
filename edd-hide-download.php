@@ -273,18 +273,19 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * We're not using ! is_main_query because no matter what the query is on the page we want to hide them
 		 * @since 1.0
 		 */
-		function pre_get_posts ( $query ) {
+		public function pre_get_posts( $query ) {
 
 			if ( ! isset( $query ) ) {
 				return;
 			}
 
-			if ( $query->is_single || ( function_exists( 'is_bbpress' ) && is_bbpress() ) || is_admin() ) {
+			if ( $query->is_single || ( function_exists( 'is_bbpress' ) && is_bbpress() ) || $query->is_admin ) {
 				return;
 			}
 
+			$vendor_dashboard_page = edd_get_option( 'fes-vendor-dashboard-page', false );
 			// if a download is hidden, prevent it from being hidden on the FES vendor dashboard page
-			if ( function_exists( 'EDD_FES' ) && is_page( EDD_FES()->helper->get_option( 'fes-vendor-dashboard-page', false ) ) ) {
+			if ( function_exists( 'EDD_FES' ) && ! $query->is_main_query() && is_page( $vendor_dashboard_page ) ) {
 				return;
 			}
 
@@ -298,12 +299,9 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 			// hide downloads from all queries except singular pages, which will 404 without the conditional
 			// is_singular('download') doesn't work inside pre_get_posts
-			if ( ! $query->is_single ) {
-				$excluded_ids = isset( $query->query_vars[ 'post__not_in' ] ) ? $query->query_vars[ 'post__not_in' ] : array();
-				// make sure we're merging with existing post__not_in so we do not override it
-				$query->set( 'post__not_in', array_merge( $excluded_ids, $this->get_hidden_downloads() ) );
-			}
-
+			$excluded_ids = isset( $query->query_vars['post__not_in'] ) ? $query->query_vars['post__not_in'] : array();
+			// make sure we're merging with existing post__not_in so we do not override it
+			$query->set( 'post__not_in', array_merge( $excluded_ids, $this->get_hidden_downloads() ) );
 		}
 
 		/**
