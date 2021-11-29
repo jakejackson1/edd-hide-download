@@ -296,6 +296,11 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 					return;
 				}
 			}
+			
+			// Allow the /wp/v2/downloads endpoint to show the product to admins
+			if ( defined( 'REST_REQUEST' ) && REST_REQUEST && current_user_can( 'edit_posts' ) ) {
+				return;
+			}
 
 			// hide downloads from all queries except singular pages, which will 404 without the conditional
 			// is_singular('download') doesn't work inside pre_get_posts
