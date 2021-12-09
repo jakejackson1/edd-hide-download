@@ -309,7 +309,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 			$query->set( 'post__not_in', array_merge( $excluded_ids, $this->get_hidden_downloads() ) );
 
 			// Logged in users also see private posts, so explicitly set the post status to publish only.
-			if ( is_user_logged_in() ) {
+			if ( is_user_logged_in() && ! empty( $query->query_vars['post_type'] ) && 'download' === $query->query_vars['post_type'] ) {
 				$statuses = isset( $query->query_vars['post_status'] ) ? $query->query_vars['post_status'] : array( 'publish' );
 				if ( is_array( $statuses ) ) {
 					$statuses = array_diff( $statuses, array( 'private' ) );
