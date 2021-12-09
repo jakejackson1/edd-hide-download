@@ -296,7 +296,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 					return;
 				}
 			}
-			
+
 			// Allow the /wp/v2/downloads endpoint to show the product to admins
 			if ( defined( 'REST_REQUEST' ) && REST_REQUEST && current_user_can( 'edit_posts' ) ) {
 				return;
@@ -307,6 +307,16 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 			$excluded_ids = isset( $query->query_vars['post__not_in'] ) ? $query->query_vars['post__not_in'] : array();
 			// make sure we're merging with existing post__not_in so we do not override it
 			$query->set( 'post__not_in', array_merge( $excluded_ids, $this->get_hidden_downloads() ) );
+
+			// Logged in users also see private posts, so explicitly set the post status to publish only.
+			if ( is_user_logged_in() ) {
+				$statuses = isset( $query->query_vars['post_status'] ) ? $query->query_vars['post_status'] : array( 'publish' );
+				if ( is_array( $statuses ) ) {
+					$statuses = array_diff( $statuses, array( 'private' ) );
+				}
+
+				$query->set( 'post_status', $statuses );
+			}
 		}
 
 		/**
