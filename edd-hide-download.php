@@ -4,6 +4,7 @@
  * Plugin URI: https://easydigitaldownloads.com/downloads/hide-download/
  * Description: Allows a download to be hidden as well as preventing direct access to the download
  * Version: 1.2.9
+ * Requires PHP: 5.3
  * Author: Sandhills Development, LLC
  * Author URI: https://sandhillsdev.com
  * Text Domain: edd-hd
@@ -296,7 +297,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 					return;
 				}
 			}
-			
+
 			// Allow the /wp/v2/downloads endpoint to show the product to admins
 			if ( defined( 'REST_REQUEST' ) && REST_REQUEST && current_user_can( 'edit_posts' ) ) {
 				return;
@@ -357,21 +358,16 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 	 * @return object Returns an instance of the main class
 	 */
 	function edd_hide_download () {
-
-		if ( ! class_exists( 'Easy_Digital_Downloads' ) ) {
-
-			if ( ! class_exists( 'EDD_Extension_Activation' ) ) {
-				require_once 'includes/class-activation.php';
-			}
-
-			$activation = new EDD_Extension_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
-			$activation = $activation->run();
-
-		} else {
-			return EDD_Hide_Download::get_instance();
-		}
+		return EDD_Hide_Download::get_instance();
 	}
 
-	add_action( 'plugins_loaded', 'edd_hide_download', apply_filters( 'edd_hd_action_priority', 10 ) );
-
+	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+	\EDD\ExtensionUtils\v1\ExtensionLoader::loadOrQuit(
+		__FILE__,
+		'edd_hide_download',
+		array(
+			'php'                    => '5.3',
+			'easy-digital-downloads' => '2.9',
+		)
+	);
 }
