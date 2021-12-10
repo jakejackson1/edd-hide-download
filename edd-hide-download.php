@@ -44,6 +44,48 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		private $hidden_downloads;
 
 		/**
+		 * Current version number.
+		 *
+		 * @var string
+		 */
+		public $version = '1.2.9';
+
+		/**
+		 * Name of the plugin.
+		 *
+		 * @var string
+		 */
+		public $title = 'EDD Hide Download';
+
+		/**
+		 * Path to the main plugin file.
+		 *
+		 * @var string
+		 */
+		public $file;
+
+		/**
+		 * Plugin basename.
+		 *
+		 * @var string
+		 */
+		public $basename;
+
+		/**
+		 * Path to this plugin's directory.
+		 *
+		 * @var string
+		 */
+		public $plugin_dir;
+
+		/**
+		 * URL to this plugin.
+		 *
+		 * @var string
+		 */
+		public $plugin_url;
+
+		/**
 		 * Main Instance
 		 *
 		 * Ensures that only one instance exists in memory at any one
@@ -94,9 +136,6 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @return void
 		 */
 		private function setup_globals () {
-			$this->version = '1.2.9';
-			$this->title   = 'EDD Hide Download';
-
 			// paths
 			$this->file       = __FILE__;
 			$this->basename   = apply_filters( 'edd_hd_plugin_basenname', plugin_basename( $this->file ) );
