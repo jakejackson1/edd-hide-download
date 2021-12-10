@@ -146,7 +146,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 			add_action( 'template_redirect', array( $this, 'redirect_hidden' ) );
 
 			// load the hidden downloads
-			$this->hidden_downloads = get_option( 'edd_hd_ids', array() );
+			$this->hidden_downloads = $this->query_hidden_downloads();
 
 			// insert actions
 			do_action( 'edd_wl_setup_actions' );
@@ -216,7 +216,9 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		function save_metabox ( $fields ) {
+		public function save_metabox( $fields ) {
+
+			delete_transient( 'edd_hd_ids' );
 			$fields[] = '_edd_hide_download';
 			$fields[] = '_edd_hide_redirect_download';
 
@@ -226,25 +228,28 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		/**
 		 * Store the hidden products ids in the options table
 		 * @since 1.1
+		 * @since 1.2.10 Updated to store product IDs as a transient.
 		 */
-		function query_hidden_downloads () {
-			$args = array(
-				'post_type'      => 'download',
-				'meta_key'       => '_edd_hide_download',
-				'posts_per_page' => - 1,
-			);
+		public function query_hidden_downloads() {
+			$hidden_downloads = get_transient( 'edd_hd_ids' );
+			if ( false === $hidden_downloads ) {
+				$downloads = new WP_Query(
+					array(
+						'post_type'      => 'download',
+						'post_status'    => 'any',
+						'meta_key'       => '_edd_hide_download',
+						'posts_per_page' => - 1,
+						'fields'         => 'ids',
+					)
+				);
 
-			$downloads = get_posts( $args );
-
-			$hidden_downloads = array();
-
-			if ( $downloads ) {
-				foreach ( $downloads as $download ) {
-					$hidden_downloads[] = $download->ID;
-				}
+				$hidden_downloads = $downloads->posts;
 			}
+			$hidden_downloads = is_array( $hidden_downloads ) ? array_unique( $hidden_downloads ) : $array();
 
-			update_option( 'edd_hd_ids', $hidden_downloads );
+			set_transient( 'edd_hd_ids', $hidden_downloads );
+
+			return $hidden_downloads;
 		}
 
 		/**
