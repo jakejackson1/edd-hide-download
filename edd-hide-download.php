@@ -240,6 +240,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 						'meta_key'       => '_edd_hide_download',
 						'posts_per_page' => - 1,
 						'fields'         => 'ids',
+						'no_found_rows'  => true,
 					)
 				);
 
