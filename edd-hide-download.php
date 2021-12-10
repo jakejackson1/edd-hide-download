@@ -245,7 +245,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 
 				$hidden_downloads = $downloads->posts;
 			}
-			$hidden_downloads = is_array( $hidden_downloads ) ? array_unique( $hidden_downloads ) : $array();
+			$hidden_downloads = is_array( $hidden_downloads ) ? array_unique( $hidden_downloads ) : array();
 
 			set_transient( 'edd_hd_ids', $hidden_downloads );
 
