@@ -4,6 +4,7 @@
  * Plugin URI: https://easydigitaldownloads.com/downloads/hide-download/
  * Description: Allows a download to be hidden as well as preventing direct access to the download
  * Version: 1.2.9
+ * Requires PHP: 5.3
  * Author: Sandhills Development, LLC
  * Author URI: https://sandhillsdev.com
  * Text Domain: edd-hd
