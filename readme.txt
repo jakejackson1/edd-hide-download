@@ -75,10 +75,17 @@ After activation, a new "Hide Download" section will appear at the bottom of Eas
 
 
 == Upgrade Notice ==
-= 1.2.9 =
-Fix PHP notices when FES is active and viewing a vendor's store.
+= 1.2.10 =
+Improve plugin handling for private downloads, access to hidden downloads via REST API.
 
 == Changelog ==
+
+= 1.2.10 =
+* Fix: Private downloads now respect the "hide" setting.
+* New: Admins can now access hidden downloads via the REST API.
+* Dev: Refactor how the plugin is loaded.
+* Dev: All class properties are explicitly declared.
+* Tweak: Updated plugin author name and URL.
 
 = 1.2.9 =
 * New: Added Danish translation.
