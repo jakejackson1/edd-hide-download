@@ -2,8 +2,9 @@
 Contributors: easydigitaldownloads, sumobi, alex.i
 Tags: easy digital downloads, digital downloads, e-downloads, edd, hide, e-commerce, ecommerce, hidden, sumobi
 Requires at least: 4.0
-Tested up to: 5.7
-Stable tag: 1.2.9
+Tested up to: 5.8
+Requires PHP: 5.3
+Stable tag: 1.2.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,10 +75,17 @@ After activation, a new "Hide Download" section will appear at the bottom of Eas
 
 
 == Upgrade Notice ==
-= 1.2.9 =
-Fix PHP notices when FES is active and viewing a vendor's store.
+= 1.2.10 =
+Improve plugin handling for private downloads, access to hidden downloads via REST API.
 
 == Changelog ==
+
+= 1.2.10 =
+* Fix: Private downloads now respect the "hide" setting.
+* New: Admins can now access hidden downloads via the REST API.
+* Dev: Refactor how the plugin is loaded.
+* Dev: All class properties are explicitly declared.
+* Tweak: Updated plugin author name and URL.
 
 = 1.2.9 =
 * New: Added Danish translation.

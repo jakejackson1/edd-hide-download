@@ -3,9 +3,10 @@
  * Plugin Name: Easy Digital Downloads - Hide Download
  * Plugin URI: https://easydigitaldownloads.com/downloads/hide-download/
  * Description: Allows a download to be hidden as well as preventing direct access to the download
- * Version: 1.2.9
- * Author: Sandhills Development, LLC
- * Author URI: https://sandhillsdev.com
+ * Version: 1.2.10
+ * Requires PHP: 5.3
+ * Author: Easy Digital Downloads
+ * Author URI: https://easydigitaldownloads.com
  * Text Domain: edd-hd
  * Domain Path: languages
  * License: GPL-2.0+
@@ -42,6 +43,48 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @var    array
 		 */
 		private $hidden_downloads;
+
+		/**
+		 * Current version number.
+		 *
+		 * @var string
+		 */
+		public $version = '1.2.10';
+
+		/**
+		 * Name of the plugin.
+		 *
+		 * @var string
+		 */
+		public $title = 'EDD Hide Download';
+
+		/**
+		 * Path to the main plugin file.
+		 *
+		 * @var string
+		 */
+		public $file;
+
+		/**
+		 * Plugin basename.
+		 *
+		 * @var string
+		 */
+		public $basename;
+
+		/**
+		 * Path to this plugin's directory.
+		 *
+		 * @var string
+		 */
+		public $plugin_dir;
+
+		/**
+		 * URL to this plugin.
+		 *
+		 * @var string
+		 */
+		public $plugin_url;
 
 		/**
 		 * Main Instance
@@ -94,9 +137,6 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @return void
 		 */
 		private function setup_globals () {
-			$this->version = '1.2.9';
-			$this->title   = 'EDD Hide Download';
-
 			// paths
 			$this->file       = __FILE__;
 			$this->basename   = apply_filters( 'edd_hd_plugin_basenname', plugin_basename( $this->file ) );
@@ -146,7 +186,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 			add_action( 'template_redirect', array( $this, 'redirect_hidden' ) );
 
 			// load the hidden downloads
-			$this->hidden_downloads = get_option( 'edd_hd_ids', array() );
+			$this->hidden_downloads = $this->query_hidden_downloads();
 
 			// insert actions
 			do_action( 'edd_wl_setup_actions' );
@@ -216,7 +256,9 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		function save_metabox ( $fields ) {
+		public function save_metabox( $fields ) {
+
+			delete_transient( 'edd_hd_ids' );
 			$fields[] = '_edd_hide_download';
 			$fields[] = '_edd_hide_redirect_download';
 
@@ -226,25 +268,29 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		/**
 		 * Store the hidden products ids in the options table
 		 * @since 1.1
+		 * @since 1.2.10 Updated to store product IDs as a transient.
 		 */
-		function query_hidden_downloads () {
-			$args = array(
-				'post_type'      => 'download',
-				'meta_key'       => '_edd_hide_download',
-				'posts_per_page' => - 1,
-			);
+		public function query_hidden_downloads() {
+			$hidden_downloads = get_transient( 'edd_hd_ids' );
+			if ( false === $hidden_downloads ) {
+				$downloads = new WP_Query(
+					array(
+						'post_type'      => 'download',
+						'post_status'    => 'any',
+						'meta_key'       => '_edd_hide_download',
+						'posts_per_page' => - 1,
+						'fields'         => 'ids',
+						'no_found_rows'  => true,
+					)
+				);
 
-			$downloads = get_posts( $args );
-
-			$hidden_downloads = array();
-
-			if ( $downloads ) {
-				foreach ( $downloads as $download ) {
-					$hidden_downloads[] = $download->ID;
-				}
+				$hidden_downloads = $downloads->posts;
 			}
+			$hidden_downloads = is_array( $hidden_downloads ) ? array_unique( $hidden_downloads ) : array();
 
-			update_option( 'edd_hd_ids', $hidden_downloads );
+			set_transient( 'edd_hd_ids', $hidden_downloads );
+
+			return $hidden_downloads;
 		}
 
 		/**
@@ -295,6 +341,11 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 				if ( user_can( $user_id, 'edit_posts' ) ) {
 					return;
 				}
+			}
+
+			// Allow the /wp/v2/downloads endpoint to show the product to admins
+			if ( defined( 'REST_REQUEST' ) && REST_REQUEST && current_user_can( 'edit_posts' ) ) {
+				return;
 			}
 
 			// hide downloads from all queries except singular pages, which will 404 without the conditional
@@ -352,21 +403,16 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 	 * @return object Returns an instance of the main class
 	 */
 	function edd_hide_download () {
-
-		if ( ! class_exists( 'Easy_Digital_Downloads' ) ) {
-
-			if ( ! class_exists( 'EDD_Extension_Activation' ) ) {
-				require_once 'includes/class-activation.php';
-			}
-
-			$activation = new EDD_Extension_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
-			$activation = $activation->run();
-
-		} else {
-			return EDD_Hide_Download::get_instance();
-		}
+		return EDD_Hide_Download::get_instance();
 	}
 
-	add_action( 'plugins_loaded', 'edd_hide_download', apply_filters( 'edd_hd_action_priority', 10 ) );
-
+	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+	\EDD\ExtensionUtils\v1\ExtensionLoader::loadOrQuit(
+		__FILE__,
+		'edd_hide_download',
+		array(
+			'php'                    => '5.3',
+			'easy-digital-downloads' => '2.9',
+		)
+	);
 }
