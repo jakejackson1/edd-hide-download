@@ -42,7 +42,7 @@ if ( ! class_exists( 'EDD_Hide_Download' ) ) {
 		 * @since  1.2
 		 * @var    array
 		 */
-		private $hidden_downloads;
+		private $hidden_downloads = array();
 
 		/**
 		 * Current version number.
